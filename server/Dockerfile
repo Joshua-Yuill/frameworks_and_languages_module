@@ -1,5 +1,5 @@
-FROM alpine
+FROM python:slim
 
-# Nick Cage Our Lord And Saviour
+CMD ["python3", "-m", "http.server"]
 
 #WORKDIR /app/
