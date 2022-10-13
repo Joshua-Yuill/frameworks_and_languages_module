@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from fastapi import Request, FastAPI
 import json
 
 app = FastAPI()
 
 posts = []
+
 
 @app.get("/",response_class=HTMLResponse,status_code=200)
 async def root():
@@ -21,8 +23,8 @@ async def root():
     """
 
 @app.post("/item/")
-async def item():
-    return {"message": "Hello World"}
+async def get_body(request: Request):
+    return await request.json()
 
 @app.get("/item/{itemId}")
 async def item_itemId():
@@ -34,4 +36,4 @@ async def item_Delete():
 
 @app.get("/items/")
 async def items():
-    return {posts}
+    return posts

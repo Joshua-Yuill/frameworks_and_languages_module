@@ -1,5 +1,5 @@
 FROM python:slim
+RUN pip install fastapi uvicorn
 WORKDIR /app/
-RUN pip install fastapi "uvicorn[standard]"
 COPY . .
-CMD ["python", "thats_so_server.py"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0"]
