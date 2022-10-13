@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+import json
 
 app = FastAPI()
 
@@ -33,4 +34,4 @@ async def item_Delete():
 
 @app.get("/items/")
 async def items():
-    return {"message": "Hello World"}
+    return {posts}
