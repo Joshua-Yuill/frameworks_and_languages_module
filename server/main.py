@@ -1,11 +1,40 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException , Request
 from fastapi.responses import HTMLResponse
-from fastapi import Request, FastAPI
-import json
+#from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
+from typing import Optional
+from datetime import datetime
 
 app = FastAPI()
 
-posts = []
+
+#Cors Headers -----------------------------------
+app.add_middleware(
+CORSMiddleware,
+allow_origins=["*"], # Allows all origins
+allow_credentials=True,
+allow_methods=["*"], # Allows all methods
+allow_headers=["*"], # Allows all headers
+)
+#-------------------------------------------------
+
+class Post(BaseModel):
+    id: Optional[str]
+    user_id: str
+    keywords: list[str]
+    description: str
+    image: str
+    lat: float
+    lon: float
+    date_from: Optional[str]
+    date_to: Optional[str]
+
+
+items = [
+    {"id": 0,"user_id": "user1234", "keywords": ["hammer","nails","tools"],"description":"A hammer and nails set","image":"https://placekitten.com/200/300","lat":51.2798438,"lon":1.0830275,"date_from": "2022-10-20T14:34:02.373Z","date_to":"2022-10-20T14:34:02.373Z"},
+    {"id": 1,"user_id": "user5678", "keywords": ["phone","charger","plug"],"description":"A phone with charger and plug","image":"https://placekitten.com/200/300","lat":51.2798438,"lon":1.0830275,"date_from": "2022-10-20T14:34:02.373Z","date_to":"2022-10-20T14:34:02.373Z"}
+]
 
 
 @app.get("/",response_class=HTMLResponse,status_code=200)
@@ -23,17 +52,21 @@ async def root():
     """
 
 @app.post("/item/")
-async def get_body(request: Request):
-    return await request.json()
+async def make_post(items: Post):
+    return items
 
 @app.get("/item/{itemId}")
-async def item_itemId():
-    return {"message": "Hello World"}
+async def read_item(itemId: int):
+    if itemId not in items:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return items[id:itemId]
 
 @app.delete("/item/{itemId}")
-async def item_Delete():
-    return {"message": "Hello World"}
+async def item_Delete(itemId: int):
+    if itemId not in items:
+        raise HTTPException(status_code=404, detail="Item not found")
+    return
 
 @app.get("/items/")
 async def items():
-    return posts
+    return items
