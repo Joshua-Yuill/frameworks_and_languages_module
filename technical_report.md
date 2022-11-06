@@ -7,12 +7,12 @@ Technical Report
 Server Framework Features
 -------------------------
 
-### (Nick Cage)
+### (Automatic Data Validation)
 
-(National Treasure)
+(A feature of using FastAPI as my framework for my server is automatic data validation. If incorrect data is entered it is dealt with automatically and an appropriate error is thrown without affecting the functionality of the program)
 (A code block snippet example demonstrating the feature - 1 mark)
 (Explain the problem-this-is-solving/why/benefits/problems - 40ish words - 1 mark)
-(Provide reference urls to your sources of information about the feature - required)
+(https://fastapi.tiangolo.com/features/)
 
 
 ### (name of Feature 2)

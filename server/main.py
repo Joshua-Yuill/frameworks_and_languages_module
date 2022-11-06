@@ -1,3 +1,5 @@
+#Importing Frameworks and Libraries ---------------------
+
 from fastapi import FastAPI, HTTPException , Request
 from fastapi.responses import HTMLResponse
 #from fastapi.middleware.cors import CORSMiddleware
@@ -6,10 +8,14 @@ from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
 
-app = FastAPI()
+#--------------------------------------------------------
+
+
+app = FastAPI() #defining "app" as fastAPI
 
 
 #Cors Headers -----------------------------------
+
 app.add_middleware(
 CORSMiddleware,
 allow_origins=["*"], # Allows all origins
@@ -17,19 +23,20 @@ allow_credentials=True,
 allow_methods=["*"], # Allows all methods
 allow_headers=["*"], # Allows all headers
 )
-#-------------------------------------------------
+
+#------------------------------------------------
+
+#Pydantic Class Model ---------------------------
 
 class Post(BaseModel):
-    id: Optional[str]
     user_id: str
-    keywords: list[str]
+    keywords: list
     description: str
     image: str
     lat: float
     lon: float
-    date_from: Optional[str]
-    date_to: Optional[str]
-
+    
+#------------------------------------------------
 
 items = [
     {"id": 0,"user_id": "user1234", "keywords": ["hammer","nails","tools"],"description":"A hammer and nails set","image":"https://placekitten.com/200/300","lat":51.2798438,"lon":1.0830275,"date_from": "2022-10-20T14:34:02.373Z","date_to":"2022-10-20T14:34:02.373Z"},
@@ -52,7 +59,7 @@ async def root():
     """
 
 @app.post("/item/")
-async def make_post(items: Post):
+async def make_item(items: Post):
     return items
 
 @app.get("/item/{itemId}")
@@ -68,5 +75,5 @@ async def item_Delete(itemId: int):
     return
 
 @app.get("/items/")
-async def items():
+async def return_items():
     return items
