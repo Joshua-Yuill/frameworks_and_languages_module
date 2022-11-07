@@ -1,34 +1,18 @@
 #Importing Frameworks and Libraries ---------------------
 
 from fastapi import FastAPI, HTTPException , Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse , JSONResponse
 #from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime
-
-#--------------------------------------------------------
-
-
-app = FastAPI() #defining "app" as fastAPI
-
-
-#Cors Headers -----------------------------------
-
-app.add_middleware(
-CORSMiddleware,
-allow_origins=["*"], # Allows all origins
-allow_credentials=True,
-allow_methods=["*"], # Allows all methods
-allow_headers=["*"], # Allows all headers
-)
-
-#------------------------------------------------
+import random
+import json
 
 #Pydantic Class Model ---------------------------
 
-class Post(BaseModel):
+class Item(BaseModel):
     user_id: str
     keywords: list
     description: str
@@ -38,10 +22,20 @@ class Post(BaseModel):
     
 #------------------------------------------------
 
-items = [
-    {"id": 0,"user_id": "user1234", "keywords": ["hammer","nails","tools"],"description":"A hammer and nails set","image":"https://placekitten.com/200/300","lat":51.2798438,"lon":1.0830275,"date_from": "2022-10-20T14:34:02.373Z","date_to":"2022-10-20T14:34:02.373Z"},
-    {"id": 1,"user_id": "user5678", "keywords": ["phone","charger","plug"],"description":"A phone with charger and plug","image":"https://placekitten.com/200/300","lat":51.2798438,"lon":1.0830275,"date_from": "2022-10-20T14:34:02.373Z","date_to":"2022-10-20T14:34:02.373Z"}
-]
+app = FastAPI() #defining "app" as fastAPI
+
+#Cors Headers -----------------------------------
+app.add_middleware(
+CORSMiddleware,
+allow_origins=["*"], # Allows all origins
+allow_credentials=True,
+allow_methods=["*"], # Allows all methods
+allow_headers=["*"], # Allows all headers
+)
+
+
+
+
 
 
 @app.get("/",response_class=HTMLResponse,status_code=200)
@@ -58,9 +52,16 @@ async def root():
     </html>
     """
 
+items = {}
+
 @app.post("/item/")
-async def make_item(items: Post):
-    return items
+async def make_item(item: Item):    
+    ItemID_Value = random.randint(1,100000)
+    item_dict = item.dict()
+    items[ItemID_Value] = item_dict # add items to dictionary
+    print(items)
+    return item_dict
+
 
 @app.get("/item/{itemId}")
 async def read_item(itemId: int):
@@ -70,10 +71,9 @@ async def read_item(itemId: int):
 
 @app.delete("/item/{itemId}")
 async def item_Delete(itemId: int):
-    if itemId not in items:
-        raise HTTPException(status_code=404, detail="Item not found")
-    return
+    return items
 
 @app.get("/items/")
-async def return_items():
+async def return_items(item: Item):
+    #convert dictionary to list or json
     return items
