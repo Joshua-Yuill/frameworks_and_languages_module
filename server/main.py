@@ -1,14 +1,11 @@
 #Importing Frameworks and Libraries ---------------------
 
-from fastapi import FastAPI, HTTPException , Request
+from fastapi import FastAPI, HTTPException , Request , Response , status
 from fastapi.responses import HTMLResponse , JSONResponse
-#from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Optional
 from datetime import datetime
-import random
-import json
+from typing import Optional , List
 
 #Pydantic Class Model ---------------------------
 
@@ -19,6 +16,17 @@ class Item(BaseModel):
     image: str
     lat: float
     lon: float
+
+class ItemOut(BaseModel):
+    id : int
+    user_id: str
+    keywords: list
+    description: str
+    image: str
+    lat: float
+    lon: float
+    date_from : datetime
+    date_to : datetime
     
 #------------------------------------------------
 
@@ -35,11 +43,12 @@ allow_headers=["*"], # Allows all headers
 
 
 
-
+itemStore = {}
+count = 0
 
 
 @app.get("/",response_class=HTMLResponse,status_code=200)
-async def root():
+async def Default():
     return """
     <html>
         <head>
@@ -52,28 +61,45 @@ async def root():
     </html>
     """
 
-items = {}
 
 @app.post("/item/")
-async def make_item(item: Item):    
-    ItemID_Value = random.randint(1,100000)
-    item_dict = item.dict()
-    items[ItemID_Value] = item_dict # add items to dictionary
-    print(items)
-    return item_dict
+async def make_item(item: Item, response: Response):
+    date = datetime.now()
+
+    max_value = max(itemStore, key=itemStore.get, default=-1)
+    max_value = max_value + 1
+    itemInput = item.dict()
+    itemID = {"id": max_value }
+    itemDate = {"date_from": date, "date_to": date}
+    resultantItem = {**itemID, **itemInput , **itemDate}
+    itemStore[max_value] = resultantItem
+
+    response.status_code = status.HTTP_201_CREATED
+
+    return itemStore
+
+
+    
+
 
 
 @app.get("/item/{itemId}")
 async def read_item(itemId: int):
-    if itemId not in items:
+    try:
+        return items[id:itemId]
+    except:
         raise HTTPException(status_code=404, detail="Item not found")
-    return items[id:itemId]
 
 @app.delete("/item/{itemId}")
 async def item_Delete(itemId: int):
-    return items
+    try:
+        return items[id:itemId]
+    except:
+        raise HTTPException(status_code=404, detail="Item not found")
 
 @app.get("/items/")
-async def return_items(item: Item):
-    #convert dictionary to list or json
-    return items
+async def return_items():
+    print(itemStore)
+    return list(itemStore.values())
+
+    
