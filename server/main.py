@@ -16,17 +16,6 @@ class Item(BaseModel):
     image: str
     lat: float
     lon: float
-
-class ItemOut(BaseModel):
-    id : int
-    user_id: str
-    keywords: list
-    description: str
-    image: str
-    lat: float
-    lon: float
-    date_from : datetime
-    date_to : datetime
     
 #------------------------------------------------
 
@@ -40,12 +29,13 @@ allow_credentials=True,
 allow_methods=["*"], # Allows all methods
 allow_headers=["*"], # Allows all headers
 )
+#------------------------------------------------
+
+itemStore = {} #Dictionary for storing submitted items
+count = 0 #Creating a count to create ID's and Keys
 
 
-
-itemStore = {}
-count = 0
-
+#HTML Index Page ---------------------------------
 
 @app.get("/",response_class=HTMLResponse,status_code=200)
 async def Default():
@@ -61,6 +51,7 @@ async def Default():
     </html>
     """
 
+#-----------------------------------------------
 
 @app.post("/item/")
 async def make_item(item: Item, response: Response):
@@ -79,23 +70,23 @@ async def make_item(item: Item, response: Response):
     return itemStore
 
 
-    
-
-
-
 @app.get("/item/{itemId}")
 async def read_item(itemId: int):
+    print(itemId)
     try:
-        return items[id:itemId]
+        return itemStore[itemId]
     except:
         raise HTTPException(status_code=404, detail="Item not found")
 
+
 @app.delete("/item/{itemId}")
-async def item_Delete(itemId: int):
+async def item_Delete(itemId: int, response: Response):
     try:
-        return items[id:itemId]
+        del itemStore[itemId]
+        response.status_code = 204
     except:
         raise HTTPException(status_code=404, detail="Item not found")
+
 
 @app.get("/items/")
 async def return_items():
