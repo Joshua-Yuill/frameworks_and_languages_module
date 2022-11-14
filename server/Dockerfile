@@ -1,5 +1,10 @@
-FROM python:slim
-RUN pip install fastapi uvicorn
+FROM node
+
 WORKDIR /app/
+
+COPY package.json ./
+RUN npm install
+
 COPY . .
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0"]
+
+ENTRYPOINT ["node", "app.js"]

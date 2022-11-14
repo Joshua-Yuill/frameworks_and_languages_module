@@ -1,7 +1,19 @@
-DOCKER_IMAGE:=server
+DOCKER_IMAGE:=express_test_2
+
+
+run_local: node_modules
+	node app.js
+node_modules:
+	npm install
 
 build:
 	docker build --tag ${DOCKER_IMAGE} .
-
-test:
+run:
 	docker run --rm -it --publish 8000:8000 ${DOCKER_IMAGE}
+run_shell:
+	docker run --rm -it --publish 8000:8000 --entrypoint /bin/sh ${DOCKER_IMAGE}
+
+clean:
+	rm -rf \
+		node_modules \
+		package-lock.json

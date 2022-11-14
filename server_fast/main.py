@@ -11,7 +11,7 @@ from typing import Optional , List
 
 class Item(BaseModel):
     user_id: str
-    keywords: list
+    keywords: List[str]
     description: str
     image: str
     lat: float
@@ -32,8 +32,6 @@ allow_headers=["*"], # Allows all headers
 #------------------------------------------------
 
 itemStore = {} #Dictionary for storing submitted items
-count = 0 #Creating a count to create ID's and Keys
-
 
 #HTML Index Page ---------------------------------
 
@@ -55,19 +53,25 @@ async def Default():
 
 @app.post("/item/")
 async def make_item(item: Item, response: Response):
+    print("start")
     date = datetime.now()
+    breakpoint()
+    try:
+        print(1)
+        max_value = max(itemStore, key=itemStore.get, default=-1)
+        print(1)
+        max_value = max_value + 1
+        itemInput = item.dict()
+        itemID = {"id": max_value }
+        itemDate = {"date_from": date, "date_to": date}
+        resultantItem = {**itemID, **itemInput , **itemDate}
+        itemStore[max_value] = resultantItem
 
-    max_value = max(itemStore, key=itemStore.get, default=-1)
-    max_value = max_value + 1
-    itemInput = item.dict()
-    itemID = {"id": max_value }
-    itemDate = {"date_from": date, "date_to": date}
-    resultantItem = {**itemID, **itemInput , **itemDate}
-    itemStore[max_value] = resultantItem
+        response.status_code = status.HTTP_201_CREATED
 
-    response.status_code = status.HTTP_201_CREATED
-
-    return itemStore
+        return resultantItem
+    except:
+        raise HTTPException(status_code=405, detail="Invalid Input")
 
 
 @app.get("/item/{itemId}")
