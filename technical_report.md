@@ -98,10 +98,25 @@ Client Language Features
 Critique of Server/Client prototype
 ---------------------
 
-### (name of Issue 1)
+### HTTP Response codes are incomplete
 
-(A code snippet example demonstrating the feature - 1 mark)
-(Explain why this pattern is problematic - 40ish words 1 mark)
+```javascript
+RESPONSE_CODES = {
+    200: 'OK',
+    201: 'Created',
+    204: 'No Content',
+    301: 'Moved Permanently',
+    304: 'Not Modified',
+    400: 'Bad Request',
+    401: 'Unauthorized',
+    403: 'Forbidden',
+    404: 'Not Found',
+    405: 'Method Not Allowed',
+    500: 'Internal Server Error',
+    501: 'Not Implemented',
+}
+```
+This code block does not follow the specification of response codes used by HTTP. This is an issue as the program will be unable to handle some responses appropriately. There could be edge-cases, while being very unlikely to happen, they are not improbable and such an incorrect HTTP code will be delivered to the user.
 
 ### (name of Issue 2)
 
