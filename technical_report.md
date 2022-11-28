@@ -100,7 +100,7 @@ Critique of Server/Client prototype
 
 ### HTTP Response codes are incomplete
 
-```javascript
+```python
 RESPONSE_CODES = {
     200: 'OK',
     201: 'Created',
@@ -117,6 +117,11 @@ RESPONSE_CODES = {
 }
 ```
 This code block does not follow the specification of response codes used by HTTP. This is an issue as the program will be unable to handle some responses appropriately. There could be edge-cases, while being very unlikely to happen, they are not improbable and such an incorrect HTTP code will be delivered to the user.
+
+//add Url
+//add only 14 of the main 16 codes, give examples of whats missing
+// COmmon response codes are catered for but might not be in the future
+// find out whats missing, doesn't have switching protocals
 
 ### (name of Issue 2)
 

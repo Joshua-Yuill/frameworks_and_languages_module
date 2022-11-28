@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" href="favicon.svg" type="image/svg+xml">
+	<title>Freecycle ⦙ Reduce Waste, Enjoy More!</title>
+	<style>
+		
+	</style>
+	<script src="https://unpkg.com/vue@next"></script>
+	<!-- <script src="vue.js"></script> -->
+</head>
+<body>
+	<h1>Freecycle</h1>
+	<div id="app">
+
+		<h2>Post a Listing</h2>
+		<form @submit.prevent="create_item" data-action="create_item">
+			Username <input name="user_id" v-model="post.name" placeholder="Username">
+			Latitude <input name="lat" v-model="post.lat" placeholder="69.000000">
+			Longitude <input name="lon" v-model="post.lon" placeholder="69.000000">
+			Image<input name="image" v-model="post.img" placeholder="http://placekitten.com/100/100">
+			Keywords <input name="keywords" v-model="post.keywords" placeholder="Keywords">
+			Description <textarea name="description" v-model="post.desc" rows="3" cols="10"></textarea>
+			<button data-action="addItem">Submit</button>
+		</form>
+
+		<h2>Listings Available</h2>
+		<ul>
+			<li v-for="post in Items">
+				<span data-field="name">{{Items.name}}</span>
+				<span data-field="lat">{{Items.lat}}</span>
+				<span data-field="lon">{{Items.lon}}</span>
+				<span data-field="img">{{Items.img}}</span>
+				<span data-field="keywords">{{Items.keywords}}</span>
+				<span data-field="desc">{{Items.desc}}</span>
+				<button data-action="delete" @click="deleteItem(Items.id)">Remove</button>
+			</li>
+		</ul>
+
+	</div>
+<script type="module">
+	const { createApp } = Vue
+	const api = ''
+	const urlParams = new URLSearchParams(window.location.search);
+	const urlAPI = (urlParams.get('api') || '/api/v1').replace(/\$/, '');
+
+	console.log(urlAPI)
+
+	const RootComponent = {
+	  data() {
+		return {
+			post: {
+				user_id: '',
+				lat: '',
+				lon: '',
+				img: '',
+				keywords: '',
+				description: '',
+			},
+			Items: [],
+		}
+	  },
+	  created() {
+		this.clearInput()
+		this.updateItems()
+	  },
+	  components: {
+	  },
+	  methods: {
+		updateItems() {
+			fetch(`${urlAPI}/Items/`, {
+			})
+				.then(response => response.json())
+				.then(json => {this.Items = json})
+			.catch(err => console.error(err))
+		},
+		clearInput() {
+			this.post = {...this.post, ...{
+				user_id: undefined,
+				lat: undefined,
+				lon: undefined,
+				img: undefined,
+				keywords: undefined,
+				description: undefined,
+			}}
+		},
+		addItem() {
+			fetch(`${urlAPI}/item`, {
+				method: 'POST',
+				headers: {'Content-Type': 'application/json'},
+				body: JSON.stringify(this.post),
+			})
+				.then(response => response.json())
+				.then(()=>this.clearInput())
+				.then(()=>this.updateItems())
+			.catch(err => console.error(err));
+		},
+		deleteItem(id) {
+			fetch(`${urlAPI}/item/${id}`, {
+				method: 'DELETE',
+			})
+				.then(()=>this.updateItems())
+			.catch(err => console.error(err));
+		}
+	  },
+	}
+	const app = Vue.createApp(RootComponent)
+	const vm = app.mount('#app')
+</script>
+
+</body>
+</html>
