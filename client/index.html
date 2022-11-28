@@ -4,16 +4,13 @@
 	<meta charset="utf-8" />
 	<link rel="icon" href="favicon.svg" type="image/svg+xml">
 	<title>Freecycle ⦙ Reduce Waste, Enjoy More!</title>
-	<style>
-		
-	</style>
+	<style>	</style>
 	<script src="https://unpkg.com/vue@next"></script>
 	<!-- <script src="vue.js"></script> -->
 </head>
 <body>
 	<h1>Freecycle</h1>
 	<div id="app">
-
 		<h2>Post a Listing</h2>
 		<form @submit.prevent="create_item" data-action="create_item">
 			Username <input name="user_id" v-model="post.name" placeholder="Username">
@@ -27,8 +24,9 @@
 
 		<h2>Listings Available</h2>
 		<ul>
-			<li v-for="post in Items">
-				<span data-field="name">{{Items.name}}</span>
+			<li v-for="item in Items">
+				<span data-field="id">{{Items.id}}</span>
+				<span data-field="user_id">{{Items.user_id}}</span>
 				<span data-field="lat">{{Items.lat}}</span>
 				<span data-field="lon">{{Items.lon}}</span>
 				<span data-field="img">{{Items.img}}</span>
@@ -37,20 +35,18 @@
 				<button data-action="delete" @click="deleteItem(Items.id)">Remove</button>
 			</li>
 		</ul>
-
 	</div>
+
 <script type="module">
 	const { createApp } = Vue
 	const api = ''
-	const urlParams = new URLSearchParams(window.location.search);
+	//const urlParams = new URLSearchParams(window.location.search);
 	const urlAPI = (urlParams.get('api') || '/api/v1').replace(/\$/, '');
-
-	console.log(urlAPI)
 
 	const RootComponent = {
 	  data() {
 		return {
-			post: {
+			item: {
 				user_id: '',
 				lat: '',
 				lon: '',
@@ -76,7 +72,7 @@
 			.catch(err => console.error(err))
 		},
 		clearInput() {
-			this.post = {...this.post, ...{
+			this.item = {...this.item, ...{
 				user_id: undefined,
 				lat: undefined,
 				lon: undefined,
@@ -89,7 +85,7 @@
 			fetch(`${urlAPI}/item`, {
 				method: 'POST',
 				headers: {'Content-Type': 'application/json'},
-				body: JSON.stringify(this.post),
+				body: JSON.stringify(this.item),
 			})
 				.then(response => response.json())
 				.then(()=>this.clearInput())
