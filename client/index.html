@@ -2,48 +2,80 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <link id="favicon" rel="shortcut icon" type="image/png" href="data:image/png;base64,....==" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 	<title>Freecycle ⦙ Reduce Waste, Enjoy More!</title>
-    <style>
-
-    /* styles here */
-
-    </style>
-   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+   	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
 <body>
-
-	<h1>Freecycle</h1>
+<nav class="navbar bg-primary text-white" style="border-radius:0px;">
+	<a class="navbar-brand" href="#">
+		<p class="text-light"> Freecycle</p>
+	</a>
+  </nav>
+  <div style="background:transparent !important" class="jumbotron text-center">
+	<h1><object data="favicon.svg" width="45" height="45"> </object>Freecycle</h1> 
+	<p>Reduce Waste, Enjoy More!</p> 
+  </div>
+  
 
 	<div id="app">
 
 		<h2>Post a Listing</h2>
-		<form @submit.prevent="create_item" data-field="user_id">
-			Username <input name="user_id" v-model="item.user_id" placeholder="Username">
+		<div class="container">
+		<form @submit.prevent="create_item" data-field="user_id" class="form-inline">
+			<div class="form-group mx-sm-3 mb-2">
+				Username
+				<input name="user_id" v-model="item.user_id" placeholder="Username">
+			</div>
+			<div class="form-group mx-sm-3 mb-2">
 			Latitude <input name="lat" v-model="item.lat" placeholder="0">
+			</div>
+			<div class="form-group mx-sm-3 mb-2">
 			Longitude <input name="lon" v-model="item.lon" placeholder="0">
+			</div>
+			<div class="form-group mx-sm-3 mb-2">
 			Image<input name="image" v-model="item.img" placeholder="http://placekitten.com/100/100">
+			</div>
+			<div class="form-group mx-sm-3 mb-2">
 			Keywords <input name="keywords" v-model="item.keywords" placeholder="Keywords">
-			Description <textarea name="description" v-model="item.description" rows="3" cols="10"></textarea>
-			<button data-action="create_item">Submit</button>
+			</div>
+			<div class="form-group mx-sm-3 mb-2">
+			Description <textarea name="description" v-model="item.description" rows="1" cols="20"></textarea>
+			</div>
+			<button data-action="create_item" class="btn btn-info">Submit</button>
 		</form>
+		</div>
 
 		<h2>Listings Available</h2>
 
-		<ul>
+		<div >
+		<ul style="list-style: none;">	
 			<li v-for="item in Items">
-				<span data-field="id">{{item.id}}</span>
-				<span>{{item.user_id}}</span>
-				<span>{{item.lat}}</span>
-				<span>{{item.lon}}</span>
-				<span>{{item.img}}</span>
-				<span>{{item.keywords}}</span>
-				<span>{{item.description}}</span>
-				<button data-action="delete" @click="deleteItem(item.id)">Remove</button>
+				<div class="col-sm-3 col-xs-10">
+					<div class="panel panel-default text-center">
+					  <div class="panel-heading">
+						<h1><span>{{item.description}}</span></h1>
+					  </div>
+					  <div class="panel-body">
+						<p> <img  src = {{item.img}} class="rounded mx-auto d-block" alt="Listing image" style="width:150px;height:150px;"> </p>
+						<p><strong>Latitude: </strong><span>{{item.lat}}</span></p>
+						<p><strong>Longitude: </strong><span>{{item.lon}}</span></p>
+						<p><strong>Keywords: </strong> <span>{{item.keywords}}</span></p>
+						<p><strong>Listed By: </strong> <span>{{item.user_id}}</span></p>
+						<p><strong>Item ID: </strong> <span>{{item.id}}</span></p>
+					  </div>
+					  <div class="panel-footer">
+						<button data-action="delete" class="btn btn-danger" @click="deleteItem(item.id)">Remove Listing</button>
+					  </div>
+					</div>      
+				  </div>
 			</li>
 		</ul>
-	
+		</div>
 	
 	</div>
 
