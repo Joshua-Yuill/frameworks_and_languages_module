@@ -1,57 +1,69 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8" />
-	<link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <meta charset="utf-8" />
+    <link id="favicon" rel="shortcut icon" type="image/png" href="data:image/png;base64,....==" />
 	<title>Freecycle ⦙ Reduce Waste, Enjoy More!</title>
-	<style>	</style>
-	<script src="https://unpkg.com/vue@next"></script>
-	<!-- <script src="vue.js"></script> -->
+    <style>
+
+    /* styles here */
+
+    </style>
+   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
+
 <body>
+
 	<h1>Freecycle</h1>
+
 	<div id="app">
+
 		<h2>Post a Listing</h2>
-		<form @submit.prevent="create_item" data-action="create_item">
-			Username <input name="user_id" v-model="post.name" placeholder="Username">
-			Latitude <input name="lat" v-model="post.lat" placeholder="69.000000">
-			Longitude <input name="lon" v-model="post.lon" placeholder="69.000000">
-			Image<input name="image" v-model="post.img" placeholder="http://placekitten.com/100/100">
-			Keywords <input name="keywords" v-model="post.keywords" placeholder="Keywords">
-			Description <textarea name="description" v-model="post.desc" rows="3" cols="10"></textarea>
-			<button data-action="addItem">Submit</button>
+		<form @submit.prevent="create_item" data-field="user_id">
+			Username <input name="user_id" v-model="item.user_id" placeholder="Username">
+			Latitude <input name="lat" v-model="item.lat" placeholder="0">
+			Longitude <input name="lon" v-model="item.lon" placeholder="0">
+			Image<input name="image" v-model="item.img" placeholder="http://placekitten.com/100/100">
+			Keywords <input name="keywords" v-model="item.keywords" placeholder="Keywords">
+			Description <textarea name="description" v-model="item.description" rows="3" cols="10"></textarea>
+			<button data-action="create_item">Submit</button>
 		</form>
 
 		<h2>Listings Available</h2>
+
 		<ul>
 			<li v-for="item in Items">
-				<span data-field="id">{{Items.id}}</span>
-				<span data-field="user_id">{{Items.user_id}}</span>
-				<span data-field="lat">{{Items.lat}}</span>
-				<span data-field="lon">{{Items.lon}}</span>
-				<span data-field="img">{{Items.img}}</span>
-				<span data-field="keywords">{{Items.keywords}}</span>
-				<span data-field="desc">{{Items.desc}}</span>
-				<button data-action="delete" @click="deleteItem(Items.id)">Remove</button>
+				<span data-field="id">{{item.id}}</span>
+				<span>{{item.user_id}}</span>
+				<span>{{item.lat}}</span>
+				<span>{{item.lon}}</span>
+				<span>{{item.img}}</span>
+				<span>{{item.keywords}}</span>
+				<span>{{item.description}}</span>
+				<button data-action="delete" @click="deleteItem(item.id)">Remove</button>
 			</li>
 		</ul>
+	
+	
 	</div>
 
 <script type="module">
 	const { createApp } = Vue
-	const api = ''
-	//const urlParams = new URLSearchParams(window.location.search);
+	const DEFAULT_API = '/api/v1';
+	const urlParams = new URLSearchParams(window.location.search);
 	const urlAPI = (urlParams.get('api') || '/api/v1').replace(/\$/, '');
 
 	const RootComponent = {
 	  data() {
 		return {
 			item: {
+				id:'',
 				user_id: '',
 				lat: '',
 				lon: '',
 				img: '',
 				keywords: '',
+				date_from:'',
 				description: '',
 			},
 			Items: [],
@@ -61,18 +73,18 @@
 		this.clearInput()
 		this.updateItems()
 	  },
-	  components: {
-	  },
+
 	  methods: {
 		updateItems() {
 			fetch(`${urlAPI}/Items/`, {
+				method: 'GET',
 			})
 				.then(response => response.json())
-				.then(json => {this.Items = json})
-			.catch(err => console.error(err))
+				.then(data => this.Items = data)
+			.catch(err => console.error(err));
 		},
 		clearInput() {
-			this.item = {...this.item, ...{
+			this.item = { ...this.item, ...{
 				user_id: undefined,
 				lat: undefined,
 				lon: undefined,
@@ -81,22 +93,25 @@
 				description: undefined,
 			}}
 		},
-		addItem() {
+		create_item() {
 			fetch(`${urlAPI}/item`, {
 				method: 'POST',
 				headers: {'Content-Type': 'application/json'},
 				body: JSON.stringify(this.item),
 			})
+
 				.then(response => response.json())
+				.then(json=>console.log('create_item()',json))
 				.then(()=>this.clearInput())
 				.then(()=>this.updateItems())
-			.catch(err => console.error(err));
+				.catch(err => console.error(err));
 		},
 		deleteItem(id) {
 			fetch(`${urlAPI}/item/${id}`, {
 				method: 'DELETE',
 			})
-				.then(()=>this.updateItems())
+			.then(json=>console.log('deleteItem()',json))
+			.then(()=>this.updateItems())
 			.catch(err => console.error(err));
 		}
 	  },

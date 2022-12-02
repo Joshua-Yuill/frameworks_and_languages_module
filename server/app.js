@@ -24,11 +24,20 @@ app.post('/item/', (req, res) => {
     if (max_val == -Infinity){
       max_val = 1
     }
-    itemId = {"id": max_val}
-    itemDate = {"date_from": d.toISOString().slice(0, 10),"date_to": d.toISOString().slice(0, 10)}
-    itemStore[max_val] = Object.assign(itemId, req.body, itemDate);
+    itemStore[max_val] = {
+      id: max_val, 
+      user_id: req.body.user_id, 
+      keywords: req.body.keywords,
+      description: req.body.description,
+      image: req.body.image,
+      lat: req.body.lat,
+      lon: req.body.lon,
+      date_from: d.toISOString().slice(0, 10),
+      date_to: d.toISOString().slice(0, 10)
+  };
 
     res.status(201).json(itemStore[max_val])
+    console.log(itemStore)
 
 })
 
@@ -60,7 +69,7 @@ app.get('/item/:id', (req, res) => {
 app.delete('/item/:id', (req, res) => {
   const id = parseInt(req.params.id)
   if(Object.keys(itemStore).includes(req.params.id)){
-      delete itemStore[id]
+      delete(itemStore[id])
       res.status(204).json(itemStore[id])
   }
   else{
