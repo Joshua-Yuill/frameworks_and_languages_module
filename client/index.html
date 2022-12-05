@@ -24,33 +24,38 @@
 
 	<div id="app">
 
-		<h2>Post a Listing</h2>
+		<h2><b>Post a Listing:</b></h2>
 		<div class="container">
 		<form @submit.prevent="create_item" data-field="user_id" class="form-inline">
 			<div class="form-group mx-sm-3 mb-2">
-				Username
-				<input name="user_id" v-model="item.user_id" placeholder="Username">
+			<b>Username:</b>
+			<input name="user_id" v-model="item.user_id" placeholder="Username">
 			</div>
 			<div class="form-group mx-sm-3 mb-2">
-			Latitude <input name="lat" v-model="item.lat" placeholder="0">
+			<b> Latitude: </b> 
+			<input name="lat" v-model="item.lat" placeholder="0">
 			</div>
 			<div class="form-group mx-sm-3 mb-2">
-			Longitude <input name="lon" v-model="item.lon" placeholder="0">
+			<b> Longitude: </b> 
+			<input name="lon" v-model="item.lon" placeholder="0">
 			</div>
 			<div class="form-group mx-sm-3 mb-2">
-			Image<input name="image" v-model="item.img" placeholder="http://placekitten.com/100/100">
+			<b> Image: </b>
+			<input name="image" v-model="item.image" placeholder="http://placekitten.com/100/100">
 			</div>
 			<div class="form-group mx-sm-3 mb-2">
-			Keywords <input name="keywords" v-model="item.keywords" placeholder="Keywords">
+			<b> Keywords: </b> 
+			<input name="keywords" v-model="item.keywords" >
 			</div>
 			<div class="form-group mx-sm-3 mb-2">
-			Description <textarea name="description" v-model="item.description" rows="1" cols="20"></textarea>
+			<b> Description: </b> 
+			<textarea name="description" v-model="item.description" rows="1" cols="20" placeholder="Item Description"></textarea>
 			</div>
 			<button data-action="create_item" class="btn btn-info">Submit</button>
 		</form>
 		</div>
 
-		<h2>Listings Available</h2>
+		<h2><b>Items Available:</b></h2>
 
 		<div >
 		<ul style="list-style: none;">	
@@ -61,12 +66,12 @@
 						<h1><span>{{item.description}}</span></h1>
 					  </div>
 					  <div class="panel-body">
-						<p> <img  src = {{item.img}} class="rounded mx-auto d-block" alt="Listing image" style="width:150px;height:150px;"> </p>
+						<p> <img  :src ="item.image" style="object-fit:contain;	width:200px; height:200px;"/> </p>
 						<p><strong>Latitude: </strong><span>{{item.lat}}</span></p>
 						<p><strong>Longitude: </strong><span>{{item.lon}}</span></p>
 						<p><strong>Keywords: </strong> <span>{{item.keywords}}</span></p>
 						<p><strong>Listed By: </strong> <span>{{item.user_id}}</span></p>
-						<p><strong>Item ID: </strong> <span>{{item.id}}</span></p>
+						<p><strong>Item ID: </strong> <span data-field="id">{{item.id}}</span></p>
 					  </div>
 					  <div class="panel-footer">
 						<button data-action="delete" class="btn btn-danger" @click="deleteItem(item.id)">Remove Listing</button>
@@ -93,7 +98,7 @@
 				user_id: '',
 				lat: '',
 				lon: '',
-				img: '',
+				image: '',
 				keywords: '',
 				date_from:'',
 				description: '',
@@ -120,7 +125,7 @@
 				user_id: undefined,
 				lat: undefined,
 				lon: undefined,
-				img: undefined,
+				image: "http://placekitten.com/100/100",
 				keywords: undefined,
 				description: undefined,
 			}}
