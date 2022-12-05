@@ -11,16 +11,16 @@
 </head>
 
 <body>
-<nav class="navbar bg-primary text-white" style="border-radius:0px;">
-	<a class="navbar-brand" href="#">
+	<nav class="navbar bg-primary text-white" style="border-radius:0px;">
+		<a class="navbar-brand" href="#">
 		<p class="text-light"> Freecycle</p>
-	</a>
-  </nav>
-  <div style="background:transparent !important" class="jumbotron text-center">
-	<h1><object data="favicon.svg" width="45" height="45"> </object>Freecycle</h1> 
-	<p>Reduce Waste, Enjoy More!</p> 
-  </div>
-  
+		</a>
+	  	</nav>
+	  	<div style="background:transparent !important" class="jumbotron text-center">
+		<h1><object data="favicon.svg" width="45" height="45"> </object>Freecycle</h1> 
+		<p>Reduce Waste, Enjoy More!</p> 
+	  	</div>
+ 
 
 	<div id="app">
 
@@ -57,8 +57,9 @@
 
 		<h2><b>Items Available:</b></h2>
 
-		<div >
-		<ul style="list-style: none;">	
+		<div>
+
+		<ul>
 			<li v-for="item in Items">
 				<div class="col-sm-3 col-xs-10">
 					<div class="panel panel-default text-center">
@@ -74,13 +75,13 @@
 						<p><strong>Item ID: </strong> <span data-field="id">{{item.id}}</span></p>
 					  </div>
 					  <div class="panel-footer">
-						<button data-action="delete" class="btn btn-danger" @click="deleteItem(item.id)">Remove Listing</button>
+						<button data-action="delete" @click="deleteItem(item.id)" class="btn btn-danger" >Delete</button>
 					  </div>
 					</div>      
 				  </div>
 			</li>
 		</ul>
-		</div>
+	</div>
 	
 	</div>
 
