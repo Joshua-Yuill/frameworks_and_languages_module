@@ -1,6 +1,6 @@
 # Server
 ## About:
-This is my **prototype** implementation of a RESTFUL API for "Freecycle-Inc", a service designed for listing items that are no longer needed or to offer services to others. My implementation was made using Express and following [the OpenAPI specification](openapi.yml) provided.
+This is my **prototype** implementation of a RESTFUL API for "Freecycle-Inc", a service designed for listing items that are no longer needed or to offer services to others. My implementation was made using Express and following [the OpenAPI specification](https://github.com/Joshua-Yuill/frameworks_and_languages_module/blob/main/openapi.yml) provided.
 
 ## How to run the server:
 This server is designed to be used in a containerized environment, which is done via the use of docker.
