@@ -4,13 +4,13 @@
     <meta charset="utf-8" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 	<title>Freecycle ⦙ Reduce Waste, Enjoy More!</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> <!--from: https://getbootstrap.com/docs/5.2/getting-started/introduction/-->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> <!--from: https://www.w3schools.com/bootstrap/-->
    	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
-<body>
+<body> <!--Creating the navbar and jumbotron at the top of the page-->
 	<nav class="navbar bg-primary text-white" style="border-radius:0px;">
 		<a class="navbar-brand" href="#">
 		<p class="text-light"> Freecycle</p>
@@ -24,7 +24,7 @@
 
 	<div id="app">
 
-		<h2><b>Post a Listing:</b></h2>
+		<h2><b>Post a Listing:</b></h2> <!-- User Input Layout and Heading -->
 		<div class="container">
 		<form @submit.prevent="create_item" data-field="user_id" class="form-inline">
 			<div class="form-group mx-sm-3 mb-2">
@@ -60,7 +60,7 @@
 		<div>
 
 		<ul>
-			<li v-for="item in Items">
+			<li v-for="item in Items"> <!--Available items Layout adn Heading-->
 				<div class="col-sm-3 col-xs-10">
 					<div class="panel panel-default text-center">
 					  <div class="panel-heading">
@@ -91,6 +91,8 @@
 	const urlParams = new URLSearchParams(window.location.search);
 	const urlAPI = (urlParams.get('api') || '/api/v1').replace(/\$/, '');
 
+	 //https://github.com/calaldees/frameworks_and_languages_module/blob/main/docs/assignment_hints.md
+
 	const RootComponent = {
 	  data() {
 		return {
@@ -104,7 +106,7 @@
 				date_from:'',
 				description: '',
 			},
-			Items: [],
+			Items: [], // Items array
 		}
 	  },
 	  created() {
@@ -113,7 +115,7 @@
 	  },
 
 	  methods: {
-		updateItems() {
+		updateItems() { // Get items from server
 			fetch(`${urlAPI}/Items/`, {
 				method: 'GET',
 			})
@@ -121,8 +123,8 @@
 				.then(data => this.Items = data)
 			.catch(err => console.error(err));
 		},
-		clearInput() {
-			this.item = { ...this.item, ...{
+		clearInput() { // Clear input Boxes
+			this.item = { ...this.item, ...{ // Setting all values back to the defaults
 				user_id: undefined,
 				lat: undefined,
 				lon: undefined,
@@ -131,7 +133,7 @@
 				description: undefined,
 			}}
 		},
-		create_item() {
+		create_item() { // Post item
 			fetch(`${urlAPI}/item`, {
 				method: 'POST',
 				headers: {'Content-Type': 'application/json'},
@@ -144,7 +146,7 @@
 				.then(()=>this.updateItems())
 				.catch(err => console.error(err));
 		},
-		deleteItem(id) {
+		deleteItem(id) { // Delete item from server
 			fetch(`${urlAPI}/item/${id}`, {
 				method: 'DELETE',
 			})
